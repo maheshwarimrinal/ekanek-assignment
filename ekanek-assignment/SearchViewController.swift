@@ -8,12 +8,15 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
     
     var search = UISearchController(searchResultsController: nil)
     
+//    var numberOfItemsPerSection = 30
+//    var isPageRefreshing : Bool = false
+//    var page : Int = 0
     
-    //Initilising ScrollView for infinite scrolling
+    //Initialising ScrollView for infinite scrolling
     let scrollView : UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -27,15 +30,19 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         return contentView
     }()
     
+    
     let imageCollectionView : UICollectionView = {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
         collectionViewFlowLayout.scrollDirection = .vertical
-        collectionViewFlowLayout.itemSize = CGSize(width: 131, height: 131)
+        collectionViewFlowLayout.minimumInteritemSpacing = 0
+        collectionViewFlowLayout.minimumLineSpacing = 2
+        collectionViewFlowLayout.itemSize = CGSize(width: 123, height: 123)
+        collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         let imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         imageCollectionView.backgroundColor = .clear
         imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "imageCollectionViewCell")
-        imageCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        imageCollectionView.contentInset = UIEdgeInsets(top: -2, left: -2, bottom: -2, right: -2)
         imageCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageCollectionView
@@ -59,32 +66,45 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func setLayout(){
         NSLayoutConstraint.activate([
-//            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-//            scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-//
-//            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-//            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-//            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-//            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-//            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             imageCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             imageCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            imageCollectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            imageCollectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+            imageCollectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            imageCollectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
             
         ])
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return numberOfItemsPerSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let collectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCollectionViewCell", for: indexPath)
-        collectionViewCell.backgroundColor = .blue
+        let collectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCollectionViewCell", for: indexPath) as! ImageCollectionViewCell
+        collectionViewCell.imageView.backgroundColor = .green
+        collectionViewCell.imageView.text = "\(indexPath.row)"
         return collectionViewCell
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//
+//        if offsetY > contentHeight - scrollView.frame.size.height {
+//           numberOfItemsPerSection += 30
+//           self.imageCollectionView.reloadData()
+//        }
+//    }
+    
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        print(numberOfItemsPerSection, "+++++++++++")
+//        if indexPath.row == numberOfItemsPerSection - 1{
+//            numberOfItemsPerSection += 30;
+//            imageCollectionView.reloadData()
+//        }
+//        print(numberOfItemsPerSection, "--------")
+//    }
+    
+    
+    
 }
