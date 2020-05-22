@@ -15,6 +15,7 @@
 		B4A40ED324766A110045F7B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4A40ED224766A110045F7B2 /* Assets.xcassets */; };
 		B4A40ED624766A110045F7B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4A40ED424766A110045F7B2 /* LaunchScreen.storyboard */; };
 		B4AB8E8E24768843005D10C9 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */; };
+		B4AB8E90247709BC005D10C9 /* SaveImageLocally.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */; };
 		B4BEDB8B247676EB00C31567 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BEDB8A247676EB00C31567 /* SearchViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		B4A40ED524766A110045F7B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B4A40ED724766A110045F7B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageLocally.swift; sourceTree = "<group>"; };
 		B4BEDB8A247676EB00C31567 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +74,7 @@
 				B4A40ECF24766A0A0045F7B2 /* ekanek_assignment.xcdatamodeld */,
 				B4BEDB8A247676EB00C31567 /* SearchViewController.swift */,
 				B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */,
+				B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */,
 			);
 			path = "ekanek-assignment";
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 				B4AB8E8E24768843005D10C9 /* ImageCollectionViewCell.swift in Sources */,
 				B4BEDB8B247676EB00C31567 /* SearchViewController.swift in Sources */,
 				B4A40ECB24766A0A0045F7B2 /* ViewController.swift in Sources */,
+				B4AB8E90247709BC005D10C9 /* SaveImageLocally.swift in Sources */,
 				B4A40ED124766A0A0045F7B2 /* ekanek_assignment.xcdatamodeld in Sources */,
 				B4A40EC724766A0A0045F7B2 /* AppDelegate.swift in Sources */,
 				B4A40EC924766A0A0045F7B2 /* SceneDelegate.swift in Sources */,

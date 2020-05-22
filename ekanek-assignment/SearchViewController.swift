@@ -8,11 +8,32 @@
 
 import UIKit
 
+struct Welcome: Codable {
+    let photos: Photos
+    let stat: String
+}
+
+// MARK: - Photos
+struct Photos: Codable {
+    let page, pages, perpage: Int
+    let total: String
+    let photo: [Photo]
+}
+
+// MARK: - Photo
+struct Photo: Codable {
+    let id, owner, secret, server: String
+    let farm: Int
+    let title: String
+    let ispublic, isfriend, isfamily: Int
+}
+
+
 class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
     
     var search = UISearchController(searchResultsController: nil)
     
-//    var numberOfItemsPerSection = 30
+    var numberOfItemsPerSection = 30
 //    var isPageRefreshing : Bool = false
 //    var page : Int = 0
     
@@ -60,7 +81,9 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         
 //        self.view.addSubview(scrollView)
 //        scrollView.addSubview(contentView)
+        
         self.view.addSubview(imageCollectionView)
+        parseJSON()
         setLayout()
     }
     
@@ -86,6 +109,22 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         return collectionViewCell
     }
     
+    func parseJSON(){
+        if let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=8d3827adfd94d09a720226ece2074c5a&format=json&text=dogs&nojsoncallback=true&per_page=30&page=1") {
+           URLSession.shared.dataTask(with: url) { data, response, error in
+              if let data = data {
+                  do {
+                    let res = try JSONDecoder().decode(Welcome.self, from: data)
+                    downloadImage( urlString: "https://farm\(res.photos.photo[0].farm).staticflickr.com/\(res.photos.photo[0].server)/\(res.photos.photo[0].id)_\(res.photos.photo[0].secret)_m.jpg")
+                  } catch let error {
+                     print(error)
+                  }
+               }
+           }.resume()
+        }
+    }
+}
+    
 //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        let offsetY = scrollView.contentOffset.y
 //        let contentHeight = scrollView.contentSize.height
@@ -104,7 +143,3 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
 //        }
 //        print(numberOfItemsPerSection, "--------")
 //    }
-    
-    
-    
-}
