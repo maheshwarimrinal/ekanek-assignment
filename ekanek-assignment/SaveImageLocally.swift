@@ -9,24 +9,6 @@
 import UIKit
 import Foundation
 
-
-func saveImage(image: UIImage, imageName: String, searchValue: String){
-    
-    let fileManager = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-    print(fileManager)
-    let imageUrl = fileManager.appendingPathComponent("\(imageName)1.png", isDirectory: true)
-    print(imageUrl.path)
-    
-    if !FileManager.default.fileExists(atPath: imageUrl.path){
-        do {
-            try image.jpegData(compressionQuality: 0.5)?.write(to: imageUrl)
-        } catch {
-            print("Unable to save")
-        }
-    }
-    
-}
-
 func downloadImage(urlString: String){
     print(urlString)
     let url = URL(string: urlString)!
@@ -43,4 +25,32 @@ func downloadImage(urlString: String){
 
 func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
     URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+}
+
+func saveImage(image: UIImage, imageName: String, searchValue: String){
+    
+    let fileManager = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(searchValue)")
+    
+    //Create directory with name of search if does not exist
+    if !FileManager.default.fileExists(atPath: fileManager.absoluteString){
+        try! FileManager.default.createDirectory(at: fileManager, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    let imageUrl = fileManager.appendingPathComponent("\(imageName)19.jpg", isDirectory: true)
+    print(imageUrl.path)
+
+//    do {
+//        let fileURLs = try FileManager.default.contentsOfDirectory(at: fileManager, includingPropertiesForKeys: nil)
+//        print(fileURLs.count)
+//    } catch {
+//    }
+    
+    if !FileManager.default.fileExists(atPath: imageUrl.path){
+        do {
+            try image.jpegData(compressionQuality: 0.5)?.write(to: imageUrl)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
 }
