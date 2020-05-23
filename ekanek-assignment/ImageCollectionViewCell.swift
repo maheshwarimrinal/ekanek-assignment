@@ -17,8 +17,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
 //        return imageView
 //    }()
     
-    let imageView : UILabel = {
-        let imageView = UILabel()
+    var imageView : UIImageView = {
+        let imageView = UIImageView()
 //        imageView.backgroundColor = .purple
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
