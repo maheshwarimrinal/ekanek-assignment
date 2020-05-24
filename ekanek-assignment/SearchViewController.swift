@@ -7,8 +7,6 @@
 //
 
 import UIKit
-//extension SearchViewController : UICollectionViewFlowLayout{
-//}
 
 var defaultDisplayCells = 3
 
@@ -17,7 +15,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     var isLoading : Bool = false
     var numberOfItemsPerSection = 30
     var pageNumber = 2
-    var searchValue = "random"
+    var searchValue = "food"
     var imagePath : [URL] = []
     var saveImageLocally = SaveImageLocally()
     var loadingView: LoadingReusableView?
@@ -58,7 +56,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.searchController = search
         
-        let settings = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(barButton))
+        let settings = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(barButton))
         navigationItem.rightBarButtonItem = settings
                 
         search.searchBar.delegate = self
@@ -76,13 +74,14 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             self.present(alertController, animated: true, completion: nil)
         }else{
             saveImageLocally.searchValue = searchValue
-            saveImageLocally.parseJson(pageNumber: pageNumber)
+            saveImageLocally.checkState(pageNumber: pageNumber)
             sleep(2)
             imagePath = saveImageLocally.imageURL()
             imageCollectionView.reloadData()
         }
     }
     
+    //Setting layout of imageCollectionView
     func setLayout(){
         NSLayoutConstraint.activate([
 
@@ -94,12 +93,13 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         ])
     }
     
+    //When search button is clicked on keyboard used to fetch search value
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchValue = searchBar.text!
         pageNumber = 2
         imagePath = []
         saveImageLocally.searchValue = searchValue
-        saveImageLocally.parseJson(pageNumber: pageNumber)
+        saveImageLocally.checkState(pageNumber: pageNumber)
         sleep(2)
         imagePath = saveImageLocally.imageURL()
         imageCollectionView.reloadData()
@@ -146,7 +146,6 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         navigationController?.pushViewController(imageViewerViewController, animated: true)
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if self.isLoading {
             return CGSize.zero
@@ -177,6 +176,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
     }
     
+    //Load more data after reaching limit of 30 images
     func loadMoreData() {
         
         if !self.isLoading {
@@ -195,6 +195,7 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
     }
     
+    //Bar buttom settings option to change settings
     @objc func barButton(){
         let fooViewController = AppSettingsViewController()
         navigationController?.pushViewController(fooViewController, animated: true)

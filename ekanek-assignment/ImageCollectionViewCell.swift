@@ -9,17 +9,9 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
-    
-//    let imageView : UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.backgroundColor = .purple
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        return imageView
-//    }()
-    
+
     var imageView : UIImageView = {
         let imageView = UIImageView()
-//        imageView.backgroundColor = .purple
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -29,7 +21,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
         self.addSubview(imageView)
         setLayout()
     }
-        
+    
+    //Setting layout for image view
     func setLayout(){
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: self.topAnchor),

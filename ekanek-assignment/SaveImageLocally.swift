@@ -35,8 +35,8 @@ class SaveImageLocally{
     var searchValue : String = ""
     var imageNumbering = 0
 
-    //Parse JSON to fetch images link
-    func parseJson(pageNumber : Int){
+    //Check application and Directory states
+    func checkState(pageNumber : Int){
         if totalValuesAvailable() == 0 && isConnectedToNetwork() == true
         {
             parseData(pageNumber: pageNumber)
@@ -49,6 +49,7 @@ class SaveImageLocally{
         }
     }
     
+    //Parse data from API in JSON format
     func parseData(pageNumber: Int){
         if let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=8d3827adfd94d09a720226ece2074c5a&format=json&text=\(searchValue)&nojsoncallback=true&per_page=30&page=\(pageNumber)") {
                 URLSession.shared.dataTask(with: url) { data, response, error in
@@ -67,6 +68,7 @@ class SaveImageLocally{
         }
     }
     
+    //Download images from URL passed
     func downloadImage(urlString: String, id: String){
         let url = URL(string: urlString)!
         getData(from: url) { data, response, error in
@@ -75,6 +77,7 @@ class SaveImageLocally{
         }
     }
     
+    //Save image in directory
     func saveImage(image: UIImage, imageName: String, id: String){
         
         do {
@@ -101,6 +104,7 @@ class SaveImageLocally{
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
 
+    //Check for total Sub Directories available in system directory
     func totalValuesAvailable() -> Int{
         var fileUrl : [URL] = []
         do {
@@ -112,6 +116,7 @@ class SaveImageLocally{
         return fileUrl.count - 1
     }
 
+    //Returns Array of URL which contain image path
     func imageURL() -> [URL]{
         var fileUrl : [URL] = []
         do {
@@ -123,14 +128,7 @@ class SaveImageLocally{
         return fileUrl
     }
     
-    func contentsOfDirectoryAtPath() -> [String]? {
-        
-        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last!
-        guard let paths = try? FileManager.default.contentsOfDirectory(atPath: path) else { return nil}
-        var hello = paths.map { aContent in (path as NSString).appendingPathComponent(aContent)}
-        return paths.map { aContent in (path as NSString).appendingPathComponent(aContent)}
-    }
-    
+    //Check internet connectivity
     public func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
@@ -158,6 +156,7 @@ class SaveImageLocally{
         return (isReachable && !needsConnection)
     }
 
+    //Clear all folder and documents in system directory
     func clearAllFilesFromTempDirectory(){
 
         let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

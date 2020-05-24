@@ -42,10 +42,12 @@ class AppSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         setLayout()
     }
     
+    //Dismiss current layout
     @objc func dismissSelf(){
         navigationController?.popViewController(animated: true)
     }
     
+    //Setting layout
     func setLayout(){
         NSLayoutConstraint.activate([
             settingsTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
@@ -90,6 +92,7 @@ class AppSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         return 1
     }
     
+    //Picker view to select one out of 3 options of 2,3,4
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return values.count
     }
