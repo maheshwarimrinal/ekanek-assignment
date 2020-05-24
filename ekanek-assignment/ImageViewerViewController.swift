@@ -9,22 +9,37 @@
 import UIKit
 
 class ImageViewerViewController: UIViewController {
+    
+    var imagePath : String = ""
+    
+    let imageViewer : UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.view.backgroundColor = .white
+        self.view.addSubview(imageViewer)
+        setLayout()
+        setImage()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setLayout(){
+        NSLayoutConstraint.activate([
+            imageViewer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            imageViewer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            imageViewer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            imageViewer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
     }
-    */
+    
+    func setImage(){
+        imageViewer.image = UIImage(named: imagePath)
+        imageViewer.contentMode = .scaleAspectFit
+        
+    }
 
 }
