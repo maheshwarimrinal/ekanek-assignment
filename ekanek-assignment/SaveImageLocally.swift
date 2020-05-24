@@ -30,8 +30,6 @@ struct Photo: Codable {
     let ispublic, isfriend, isfamily: Int
 }
 
-
-
 class SaveImageLocally{
     
     var searchValue : String = ""
@@ -39,12 +37,17 @@ class SaveImageLocally{
 
     //Parse JSON to fetch images link
     func parseJson(pageNumber : Int){
-        if totalValuesAvailable() == 0 && isConnectedToNetwork() == true{
-                parseData(pageNumber: pageNumber)
-            }else if totalValuesAvailable() > 0 && isConnectedToNetwork() == true{
-                parseData(pageNumber: pageNumber)
-            }
+        if totalValuesAvailable() == 0 && isConnectedToNetwork() == true
+        {
+            parseData(pageNumber: pageNumber)
+        }else if totalValuesAvailable() > 0 && isConnectedToNetwork() == true
+        {
+            parseData(pageNumber: pageNumber)
+        }else if totalValuesAvailable() > 0 && isConnectedToNetwork() == false
+        {
+            
         }
+    }
     
     func parseData(pageNumber: Int){
         if let url = URL(string: "https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=8d3827adfd94d09a720226ece2074c5a&format=json&text=\(searchValue)&nojsoncallback=true&per_page=30&page=\(pageNumber)") {
@@ -69,9 +72,6 @@ class SaveImageLocally{
         getData(from: url) { data, response, error in
             guard let data = data, error == nil else { return }
             self.saveImage(image: UIImage(data: data)!, imageName: "hello", id: id)
-//            DispatchQueue.main.async() {
-//                self?.imageView.image = UIImage(data: data)
-//            }
         }
     }
     
@@ -84,7 +84,6 @@ class SaveImageLocally{
             if !FileManager.default.fileExists(atPath: fileManager.absoluteString){
                 try FileManager.default.createDirectory(at: fileManager, withIntermediateDirectories: true, attributes: nil)
             }
-            
             let imageUrl = fileManager.appendingPathComponent("\(imageName)_\(id).jpg", isDirectory: true)
             if !FileManager.default.fileExists(atPath: imageUrl.path){
                 do {
@@ -96,8 +95,6 @@ class SaveImageLocally{
         } catch {
             print(error.localizedDescription)
         }
-        
-        
     }
 
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
@@ -111,7 +108,8 @@ class SaveImageLocally{
         } catch {
             return fileUrl.count
         }
-        return fileUrl.count
+//        print(fileUrl)
+        return fileUrl.count - 1
     }
 
     func imageURL() -> [URL]{
@@ -123,6 +121,14 @@ class SaveImageLocally{
             return fileUrl
         }
         return fileUrl
+    }
+    
+    func contentsOfDirectoryAtPath() -> [String]? {
+        
+        let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last!
+        guard let paths = try? FileManager.default.contentsOfDirectory(atPath: path) else { return nil}
+        var hello = paths.map { aContent in (path as NSString).appendingPathComponent(aContent)}
+        return paths.map { aContent in (path as NSString).appendingPathComponent(aContent)}
     }
     
     public func isConnectedToNetwork() -> Bool {
@@ -152,4 +158,11 @@ class SaveImageLocally{
         return (isReachable && !needsConnection)
     }
 
+    func clearAllFilesFromTempDirectory(){
+
+        let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        do {
+            try FileManager.default.removeItem(at: documentsUrl)
+        } catch  { print(error.localizedDescription) }
+    }
 }

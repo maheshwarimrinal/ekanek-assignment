@@ -10,35 +10,46 @@ import UIKit
 //extension SearchViewController : UICollectionViewFlowLayout{
 //}
 
+var defaultDisplayCells = 3
+
 class SearchViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate{
     
     var isLoading : Bool = false
     var numberOfItemsPerSection = 30
     var pageNumber = 2
-    var searchValue = "cats"
+    var searchValue = "random"
     var imagePath : [URL] = []
     var saveImageLocally = SaveImageLocally()
+    var loadingView: LoadingReusableView?
+    
             
     var search = UISearchController(searchResultsController: nil)
-    
     
     let imageCollectionView : UICollectionView = {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
         collectionViewFlowLayout.scrollDirection = .vertical
         collectionViewFlowLayout.minimumInteritemSpacing = 0
         collectionViewFlowLayout.minimumLineSpacing = 2
-        collectionViewFlowLayout.itemSize = CGSize(width: 123, height: 123)
         collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         collectionViewFlowLayout.invalidateLayout()
         
         let imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
         imageCollectionView.backgroundColor = .clear
         imageCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: "imageCollectionViewCell")
-//        imageCollectionView.isScrollEnabled = false
-//        imageCollectionView.contentInset = UIEdgeInsets(top: -2, left: -2, bottom: -2, right: -2)
         imageCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return imageCollectionView
+    }()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        imageCollectionView.reloadData()
+    }
+    
+    let bottomRefreshLoader : UIRefreshControl = {
+        let bottomRefreshLoader = UIRefreshControl()
+//        bottomRefreshLoader.offse
+        return bottomRefreshLoader
     }()
     
     override func viewDidLoad() {
@@ -46,18 +57,30 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.navigationItem.title = "Search"
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.searchController = search
+        
+        let settings = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(barButton))
+        navigationItem.rightBarButtonItem = settings
                 
         search.searchBar.delegate = self
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         
+        let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
+        imageCollectionView.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
+        
         self.view.addSubview(imageCollectionView)
         setLayout()
-        saveImageLocally.searchValue = searchValue
-        saveImageLocally.parseJson(pageNumber: pageNumber)
-//        sleep(3)
-//        imagePath = saveImageLocally.imageURL()
-//        imageCollectionView.reloadData()
+        if saveImageLocally.totalValuesAvailable() == 0 && saveImageLocally.isConnectedToNetwork() == false{
+            let alertController = UIAlertController(title: "Connectivity", message: "Kindly Connect to internet to load infornmation", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default))
+            self.present(alertController, animated: true, completion: nil)
+        }else{
+            saveImageLocally.searchValue = searchValue
+            saveImageLocally.parseJson(pageNumber: pageNumber)
+            sleep(2)
+            imagePath = saveImageLocally.imageURL()
+            imageCollectionView.reloadData()
+        }
     }
     
     func setLayout(){
@@ -73,7 +96,14 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchValue = searchBar.text!
-//        parseJson()
+        pageNumber = 2
+        imagePath = []
+        saveImageLocally.searchValue = searchValue
+        saveImageLocally.parseJson(pageNumber: pageNumber)
+        sleep(2)
+        imagePath = saveImageLocally.imageURL()
+        imageCollectionView.reloadData()
+        searchBar.endEditing(true)
     }
 
     func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -96,6 +126,57 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var size : CGSize = CGSize(width: 0, height: 0)
+        if defaultDisplayCells == 2{
+            size = CGSize(width: 195, height: 195)
+        }
+        if defaultDisplayCells == 3{
+            size = CGSize(width: 130, height: 130)
+        }
+        if defaultDisplayCells == 4{
+            size = CGSize(width: 97, height: 97)
+        }
+        return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let imageViewerViewController = ImageViewerViewController()
+        imageViewerViewController.imagePath = imagePath[indexPath.row].path
+        navigationController?.pushViewController(imageViewerViewController, animated: true)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if self.isLoading {
+            return CGSize.zero
+        } else {
+            return CGSize(width: collectionView.bounds.size.width, height: 55)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionFooter {
+            let aFooterView = imageCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "loadingresuableviewid", for: indexPath) as! LoadingReusableView
+            loadingView = aFooterView
+            loadingView?.backgroundColor = UIColor.clear
+            return aFooterView
+        }
+        return UICollectionReusableView()
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            self.loadingView?.activityIndicator.startAnimating()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            self.loadingView?.activityIndicator.stopAnimating()
+        }
+    }
+    
     func loadMoreData() {
         
         if !self.isLoading {
@@ -104,50 +185,19 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
             self.saveImageLocally.parseData(pageNumber: self.pageNumber)
             
             DispatchQueue.global().async {
-                // fake background loading task
-//                for _ in start...end {
-//                    self.itemsArray.append(self.getRandomColor())
-//                }
                 sleep(3)
                 DispatchQueue.main.async {
                     self.imagePath = self.saveImageLocally.imageURL()
-                    print(self.imagePath.count, self.saveImageLocally.imageURL().count)
                     self.imageCollectionView.reloadData()
                     self.isLoading = false
                 }
             }
         }
     }
-}
-        
-        
-//        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-//            if self.isLoading {
-//                return CGSize.zero
-//            } else {
-//                return CGSize(width: collectionView.bounds.size.width, height: 55)
-//            }
-//        }
-//
-//        func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//            if kind == UICollectionView.elementKindSectionFooter {
-//                let aFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "loadingresuableviewid", for: indexPath) as! LoadingReusableView
-//                loadingView = aFooterView
-//                loadingView?.backgroundColor = UIColor.clear
-//                return aFooterView
-//            }
-//            return UICollectionReusableView()
-//        }
-//
-//        func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-//            if elementKind == UICollectionView.elementKindSectionFooter {
-//                self.loadingView?.activityIndicator.startAnimating()
-//            }
-//        }
-//
-//        func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
-//            if elementKind == UICollectionView.elementKindSectionFooter {
-//                self.loadingView?.activityIndicator.stopAnimating()
-//            }
-//        }
     
+    @objc func barButton(){
+        let fooViewController = AppSettingsViewController()
+        navigationController?.pushViewController(fooViewController, animated: true)
+    }
+    
+}

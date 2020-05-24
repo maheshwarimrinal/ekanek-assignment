@@ -17,6 +17,10 @@
 		B4AB8E8E24768843005D10C9 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */; };
 		B4AB8E90247709BC005D10C9 /* SaveImageLocally.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */; };
 		B4BEDB8B247676EB00C31567 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BEDB8A247676EB00C31567 /* SearchViewController.swift */; };
+		B4C705CD247A3DE8007FF1B1 /* AppSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C705CC247A3DE8007FF1B1 /* AppSettingsViewController.swift */; };
+		B4C705CF247A917D007FF1B1 /* ImageViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C705CE247A917D007FF1B1 /* ImageViewerViewController.swift */; };
+		B4C705D5247A970F007FF1B1 /* LoadingReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C705D3247A970F007FF1B1 /* LoadingReusableView.swift */; };
+		B4C705D6247A970F007FF1B1 /* LoadingReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4C705D4247A970F007FF1B1 /* LoadingReusableView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,10 @@
 		B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveImageLocally.swift; sourceTree = "<group>"; };
 		B4BEDB8A247676EB00C31567 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		B4C705CC247A3DE8007FF1B1 /* AppSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsViewController.swift; sourceTree = "<group>"; };
+		B4C705CE247A917D007FF1B1 /* ImageViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerViewController.swift; sourceTree = "<group>"; };
+		B4C705D3247A970F007FF1B1 /* LoadingReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingReusableView.swift; sourceTree = "<group>"; };
+		B4C705D4247A970F007FF1B1 /* LoadingReusableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingReusableView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +72,7 @@
 		B4A40EC524766A0A0045F7B2 /* ekanek-assignment */ = {
 			isa = PBXGroup;
 			children = (
+				B4C705D2247A96F8007FF1B1 /* LoadingReusableView */,
 				B4A40EC624766A0A0045F7B2 /* AppDelegate.swift */,
 				B4A40EC824766A0A0045F7B2 /* SceneDelegate.swift */,
 				B4A40ECA24766A0A0045F7B2 /* ViewController.swift */,
@@ -75,8 +84,19 @@
 				B4BEDB8A247676EB00C31567 /* SearchViewController.swift */,
 				B4AB8E8D24768843005D10C9 /* ImageCollectionViewCell.swift */,
 				B4AB8E8F247709BC005D10C9 /* SaveImageLocally.swift */,
+				B4C705CC247A3DE8007FF1B1 /* AppSettingsViewController.swift */,
+				B4C705CE247A917D007FF1B1 /* ImageViewerViewController.swift */,
 			);
 			path = "ekanek-assignment";
+			sourceTree = "<group>";
+		};
+		B4C705D2247A96F8007FF1B1 /* LoadingReusableView */ = {
+			isa = PBXGroup;
+			children = (
+				B4C705D3247A970F007FF1B1 /* LoadingReusableView.swift */,
+				B4C705D4247A970F007FF1B1 /* LoadingReusableView.xib */,
+			);
+			path = LoadingReusableView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4C705D6247A970F007FF1B1 /* LoadingReusableView.xib in Resources */,
 				B4A40ED624766A110045F7B2 /* LaunchScreen.storyboard in Resources */,
 				B4A40ED324766A110045F7B2 /* Assets.xcassets in Resources */,
 				B4A40ECE24766A0A0045F7B2 /* Main.storyboard in Resources */,
@@ -150,12 +171,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4C705CF247A917D007FF1B1 /* ImageViewerViewController.swift in Sources */,
 				B4AB8E8E24768843005D10C9 /* ImageCollectionViewCell.swift in Sources */,
 				B4BEDB8B247676EB00C31567 /* SearchViewController.swift in Sources */,
 				B4A40ECB24766A0A0045F7B2 /* ViewController.swift in Sources */,
+				B4C705CD247A3DE8007FF1B1 /* AppSettingsViewController.swift in Sources */,
 				B4AB8E90247709BC005D10C9 /* SaveImageLocally.swift in Sources */,
 				B4A40ED124766A0A0045F7B2 /* ekanek_assignment.xcdatamodeld in Sources */,
 				B4A40EC724766A0A0045F7B2 /* AppDelegate.swift in Sources */,
+				B4C705D5247A970F007FF1B1 /* LoadingReusableView.swift in Sources */,
 				B4A40EC924766A0A0045F7B2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
