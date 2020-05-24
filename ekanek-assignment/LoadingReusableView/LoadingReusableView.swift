@@ -14,6 +14,6 @@ class LoadingReusableView: UICollectionReusableView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        activityIndicator.color = UIColor.white
+        activityIndicator.color = UIColor.gray
     }
 }
