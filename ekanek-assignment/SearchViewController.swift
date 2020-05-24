@@ -129,13 +129,13 @@ class SearchViewController: UIViewController, UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var size : CGSize = CGSize(width: 0, height: 0)
         if defaultDisplayCells == 2{
-            size = CGSize(width: 195, height: 195)
+            size = CGSize(width: self.view.frame.width * 0.47, height: self.view.frame.width * 0.47)
         }
         if defaultDisplayCells == 3{
-            size = CGSize(width: 130, height: 130)
+            size = CGSize(width: self.view.frame.width * 0.314, height: self.view.frame.width * 0.314)
         }
         if defaultDisplayCells == 4{
-            size = CGSize(width: 97, height: 97)
+            size = CGSize(width: self.view.frame.width * 0.2343, height: self.view.frame.width * 0.2343)
         }
         return size
     }

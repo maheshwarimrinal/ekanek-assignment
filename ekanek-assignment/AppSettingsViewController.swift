@@ -28,7 +28,7 @@ class AppSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         self.view.backgroundColor = .white
         
         self.navigationItem.title = "Settings"
-        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissSelf))
+        let cancelBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(dismissSelf))
         navigationItem.rightBarButtonItem = cancelBarButton
         
         settingsTableView.delegate = self
